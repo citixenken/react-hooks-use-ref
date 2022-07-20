@@ -5,11 +5,11 @@ import { addPoint } from "../utils/chart";
 function Ticker() {
   const [price, setPrice] = useState({ value: 0, ticks: 0 });
   const [color, setColor] = useState("black");
-  const prevPrice = useRef(price);
+  const prevPriceRef = useRef(price);
   const canvasRef = useRef();
 
   useEffect(() => {
-    addPoint(canvasRef.current, prevPrice.current, price);
+    addPoint(canvasRef.current, prevPriceRef.current, price);
   }, [price]);
 
   useEffect(() => {
@@ -23,14 +23,14 @@ function Ticker() {
   }, []);
 
   useEffect(() => {
-    if (prevPrice.current.value < price.value) {
+    if (price.value > prevPriceRef.current.value) {
       setColor("green");
-    } else if (prevPrice.current.value > price.value) {
+    } else if (price.value < prevPriceRef.current.value) {
       setColor("red");
     } else {
       setColor("black");
     }
-    prevPrice.current = price;
+    prevPriceRef.current = price;
   }, [price]);
 
   return (
